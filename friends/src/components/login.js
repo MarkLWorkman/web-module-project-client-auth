@@ -1,48 +1,58 @@
-import React, { useState } from "react";
+import React from "react";
 import axios from "axios";
 
-export default function LoginForm() {
-  const [formValues, setFormValues] = useState({ username: "", password: "" });
-
-  const handleChange = (e) => {
-    setFormValues({ ...formValues, [e.target.name]: e.target.value });
+class Login extends React.Component {
+  state = {
+    login: {
+      username: "",
+      password: "",
+    },
   };
-  const formSubmit = (e) => {
-    e.preventDefault();
+
+  handleChange = (evt) => {
+    this.setState({
+      login: {
+        ...this.state.login,
+        [evt.target.name]: evt.target.value,
+      },
+    });
+  };
+
+  login = (evt) => {
+    evt.preventDefault();
+
     axios
-      .post("http://localhost:5000/api/login", formValues)
-      .then((resp) => {
-        localStorage.setItem("token", resp.data.payload);
+      .post("http://localhost:5000/api/login", this.state.login)
+      .then((res) => {
+        localStorage.setItem("token", res.data.payload);
+        this.props.history.push("/protected");
       })
       .catch((err) => {
         console.log(err.response);
       });
   };
 
-  return (
-    <form onSubmit={formSubmit} className="loginForm">
-      <h1>Login</h1>
-      <label>
-        Username
-        <input
-          type="text"
-          name="username"
-          value={formValues.username}
-          onChange={handleChange}
-        />
-      </label>
-      <br></br>
-      <label>
-        Password
-        <input
-          type="password"
-          name="password"
-          value={formValues.password}
-          onChange={handleChange}
-        />
-      </label>
-      <br></br>
-      <button>Submit</button>
-    </form>
-  );
+  render() {
+    return (
+      <div>
+        <form onSubmit={this.login}>
+          <input
+            type="text"
+            name="username"
+            value={this.state.login.username}
+            onChange={this.handleChange}
+          />
+          <input
+            type="password"
+            name="password"
+            value={this.state.login.password}
+            onChange={this.handleChange}
+          />
+          <button>Log in</button>
+        </form>
+      </div>
+    );
+  }
 }
+
+export default Login;

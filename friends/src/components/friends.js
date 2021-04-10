@@ -1,48 +1,47 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { axiosWithAuth } from "../components/axiosWithAuth";
-import FriendsForm from "../components/friendform.js";
+import React from "react";
+import { axiosWithAuth } from "../utils/axiosWithAuth";
+import FriendForm from "./FriendForm";
 
-export default function FriendsList() {
-  const [friends, setFriends] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+class FriendsList extends React.Component {
+  state = {
+    friends: [],
+  };
 
-  const fetchMyFriendsList = () => {
-    setIsLoading(true);
+  componentDidMount() {
+    this.getFriends();
+  }
 
+  getFriends = () => {
     axiosWithAuth()
-      .get("http://localhost:5000/api/friends", {
-        headers: {
-          authorization: localStorage.getItem("token"),
-        },
-      })
-      .then((resp) => {
-        setFriends(resp.data);
-        setIsLoading(false);
+      .get("/api/friends")
+      .then((res) => {
+        console.log(res);
+        this.setState({
+          ...this.state,
+          friends: [...res.data],
+        });
       })
       .catch((err) => {
         console.log(err.response);
-        setIsLoading(false);
       });
   };
 
-  useEffect(() => {
-    fetchMyFriendsList();
-  }, []);
-
-  return (
-    <div>
-      <h1>You're Logged in! Here are your friends:</h1>
-      {isLoading ? (
-        <h1>Loading Friends...</h1>
-      ) : (
-        friends.map((friend) => {
-          return <h4>{friend.name}</h4>;
-        })
-      )}
-
-      <h1> Add A Friend</h1>
-      <FriendsForm fetchMyFriendsList={fetchMyFriendsList} />
-    </div>
-  );
+  render() {
+    return (
+      <div>
+        <FriendForm getFriends={this.getFriends} friends={this.state.friends} />
+        {this.state.friends.map((friend) => {
+          return (
+            <div>
+              <p> Name: {friend.name}</p>
+              <p> Age: {friend.age}</p>
+              <p> Email: {friend.email}</p>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
 }
+
+export default FriendsList;
