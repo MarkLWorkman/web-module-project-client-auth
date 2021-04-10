@@ -14,15 +14,15 @@ class FriendsList extends React.Component {
   getFriends = () => {
     axiosWithAuth()
       .get("/api/friends")
-      .then((res) => {
-        console.log(res);
+      .then((response) => {
+        console.log(response);
         this.setState({
           ...this.state,
-          friends: [...res.data],
+          friends: [...response.data],
         });
       })
-      .catch((err) => {
-        console.log(err.response);
+      .catch((error) => {
+        console.log(error.response);
       });
   };
 

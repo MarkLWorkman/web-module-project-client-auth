@@ -9,26 +9,26 @@ class Login extends React.Component {
     },
   };
 
-  handleChange = (evt) => {
+  handleChanges = (event) => {
     this.setState({
       login: {
         ...this.state.login,
-        [evt.target.name]: evt.target.value,
+        [event.target.name]: event.target.value,
       },
     });
   };
 
-  login = (evt) => {
-    evt.preventDefault();
+  login = (event) => {
+    event.preventDefault();
 
     axios
       .post("http://localhost:5000/api/login", this.state.login)
-      .then((res) => {
-        localStorage.setItem("token", res.data.payload);
+      .then((response) => {
+        localStorage.setItem("token", response.data.payload);
         this.props.history.push("/protected");
       })
-      .catch((err) => {
-        console.log(err.response);
+      .catch((error) => {
+        console.log(error.response);
       });
   };
 
@@ -36,17 +36,20 @@ class Login extends React.Component {
     return (
       <div>
         <form onSubmit={this.login}>
+          <label htmlFor="username">UserName </label>
           <input
             type="text"
             name="username"
             value={this.state.login.username}
-            onChange={this.handleChange}
+            onChange={this.handleChanges}
           />
+
+          <label htmlFor="password">Password </label>
           <input
             type="password"
             name="password"
             value={this.state.login.password}
-            onChange={this.handleChange}
+            onChange={this.handleChanges}
           />
           <button>Log in</button>
         </form>

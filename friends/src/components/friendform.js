@@ -11,27 +11,27 @@ export default function FriendForm(props) {
   const [values, setValues] = useState(initialValues);
   const { getFriends, friends } = props;
 
-  const change = (evt) => {
-    const { name, value } = evt.target;
+  const handleChanges = (event) => {
+    const { name, value } = event.target;
     setValues({ ...values, [name]: value });
   };
 
   const addFriend = (newFriend) => {
     axiosWithAuth()
       .post(`/api/friends`, newFriend)
-      .then((res) => {
-        console.log(res.response);
+      .then((response) => {
+        console.log(response.response);
       })
-      .catch((err) => {
-        console.log(err.response);
+      .catch((error) => {
+        console.log(error.response);
       })
       .then(() => {
         getFriends();
       });
   };
 
-  const submit = (evt) => {
-    evt.preventDefault();
+  const submit = (event) => {
+    event.preventDefault();
 
     const newFriend = {
       ...values,
@@ -48,7 +48,7 @@ export default function FriendForm(props) {
         <input
           name="name"
           type="text"
-          onChange={change}
+          onChange={handleChanges}
           value={values.name}
           placeholder="Name"
         />
@@ -58,7 +58,7 @@ export default function FriendForm(props) {
         <input
           name="age"
           type="number"
-          onChange={change}
+          onChange={handleChanges}
           value={values.age}
           placeholder="Age"
         />
@@ -68,7 +68,7 @@ export default function FriendForm(props) {
         <input
           name="email"
           type="text"
-          onChange={change}
+          onChange={handleChanges}
           value={values.email}
           placeholder="Email"
         />

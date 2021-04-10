@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 
 import Login from "./components/Login";
 import FriendsList from "./components/Friends";
@@ -12,7 +12,7 @@ function App() {
   };
 
   return (
-    <Router>
+    <BrowserRouter>
       <div className="App">
         <h1> Friends</h1>
         <div>
@@ -28,7 +28,7 @@ function App() {
           <Route component={Login} />
         </Switch>
       </div>
-    </Router>
+    </BrowserRouter>
   );
 }
 
